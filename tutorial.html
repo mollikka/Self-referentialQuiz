@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Self-referential Quiz</title>
+
+    <style>
+        li ol {list-style-type:upper-alpha}
+    </style>
+</head>
+<body>
+
+    <h1>Self-referential Quiz</h1>
+    
+    <script>
+        function validate() {
+            console.log("validating");
+            function getValue(qName){
+                var radios = document.getElementsByName(qName);
+                for (var i = 0, length = radios.length; i < length; i++) {
+                    if (radios[i].checked) {
+                    return radios[i].value}}
+                return "No answer";
+            };
+            
+            function count(value,list){
+                c = 0;
+                for (var i = 0; i < list.length; i++) {
+                    if (value == list[i]){
+                        c+=1;}
+                }
+                return c;
+            };
+
+
+            var questionCount = document.querySelectorAll("#questions > li").length
+            var answers = [];
+            for (var i = 0; i < questionCount; i++) {
+                answers[i]=getValue(i);
+            }
+
+            for (var i = 0; i < 4; i++) {
+                console.log(i + ":" + count(i,answers));
+            }
+
+            console.log(answers);
+            
+            var correct = [];
+            correct[0] = (answers[0]==answers[1]);
+            correct[1] = (answers[1]==count(1,answers));
+            correct[2] = (answers[2]==count(0,answers));
+            
+            console.log(correct);
+            function youWin(correct) {
+                for (var j=0; j < correct.length; j++) {
+                    if (correct[j] == false) {
+                        return false;
+                    }}
+                return true;
+            }
+            if (youWin(correct)) {
+                alert("Yes! You found a solution!");
+            } else {
+                alert("Unfortunately that's not a viable solution.");
+            }
+        }
+    </script>
+
+    <ol id="questions">
+        <li>
+            <h2>What is the answer to the second question?</h2>
+            <ol>
+                <li><input type="radio" name="0" value="0">A</li>
+                <li><input type="radio" name="0" value="1">B</li>
+                <li><input type="radio" name="0" value="2">C</li>
+                <li><input type="radio" name="0" value="3">D</li>
+            </ol>
+        </li>
+
+        <li>
+            <h2>How many correct answers are B?</h2>
+            <ol>
+                <li><input type="radio" name="1" value="0">0</li>
+                <li><input type="radio" name="1" value="1">1</li>
+                <li><input type="radio" name="1" value="2">2</li>
+                <li><input type="radio" name="1" value="3">3</li>
+            </ol>
+        </li>
+
+        <li>
+            <h2>Is there a question with the correct answer A?</h2>
+            <ol>
+                <li><input type="radio" name="2" value="0">No</li>
+                <li><input type="radio" name="2" value="1">Yes, 1</li>
+                <li><input type="radio" name="2" value="2">Yes, 2</li>
+                <li><input type="radio" name="2" value="3">Yes, all 3</li>
+            </ol>
+            </form>
+        </li>
+    </ol>
+
+    <input type="button" value="Validate" onclick="return validate();">
+
+
+</body>
+</html>
+
